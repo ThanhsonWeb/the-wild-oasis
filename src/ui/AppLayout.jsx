@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
+
 const StyledAppLayout = styled.div`
 	display: grid;
 	grid-template-columns: 26rem 1fr;
-	grid-template-rows: auto 1fr; // first row (Header) take space to fits its content
-	/* second row(Outlet) is remaining space */
+	grid-template-rows: auto 1fr; 
 	height: 100vh;
 `;
 
