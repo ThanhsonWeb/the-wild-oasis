@@ -3,6 +3,7 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import Button from "./ui/Button";
 import Input from "./ui/Input.jsx";
 import Heading from "./ui/Heading";
+import Row from "./ui/Row";
 
 const StyledApp = styled.div`
 	background: #a49999;
@@ -14,12 +15,28 @@ function App() {
 		<>
 			<GlobalStyles />
 			<StyledApp>
-				<Heading as="h1">Hello em anh cho</Heading>;
-				<Button onClick={() => alert("hello")}>Check in</Button>
-				<Button onClick={() => alert("bye")}>Check in</Button>
-				<Input type="text" placeholder="name.." />
-				<Input type="text" placeholder="name.." />
-				<Heading as="h4">Wake up</Heading>
+				<Row>
+					<Row type="horizontal">
+						<Heading as="h1">Hello em anh cho</Heading>;
+						<div>
+							<Button onClick={() => alert("hello")}>Check in</Button>
+							<Button
+								variation="danger"
+								size="medium"
+								onClick={() => alert("bye")}
+							>
+								Check in
+							</Button>
+						</div>
+					</Row>
+					<Row>
+						<div>
+							<Heading as="h4">Form</Heading>
+							<Input type="text" placeholder="name.." />
+							<Input type="number" placeholder="number.." />
+						</div>
+					</Row>
+				</Row>
 			</StyledApp>
 		</>
 	);
