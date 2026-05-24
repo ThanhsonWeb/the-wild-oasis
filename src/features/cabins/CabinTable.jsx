@@ -29,7 +29,6 @@ const TableHeader = styled.header`
 
 function CabinTable() {
   // normal way : useEffect + useState 
-
   // better way : less code ,Built‑in loading & error states 
 	const {
 		data: cabins,
@@ -37,7 +36,7 @@ function CabinTable() {
 		error,
 	} = useQuery({
 		queryKey: ["cabin"],
-		queryFn: getCabins,
+		queryFn: getCabins, //  CabinTable is on mount -> trigger this function
 	});
 
 	if (isLoading) return <Spinner />;
@@ -46,10 +45,12 @@ function CabinTable() {
 	return (
 		<Table role="table">
 			<TableHeader role="row">
+        <div></div>
 				<div>CABIN</div>
 				<div>CAPACITY</div>
 				<div>PRICE</div>
 				<div>DISCOUNT</div>
+        <div></div>
 			</TableHeader>
 
 			{cabins.map((cabin) => (
