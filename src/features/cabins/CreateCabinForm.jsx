@@ -48,10 +48,17 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
-	const { register, handleSubmit, reset } = useForm();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		// b2 . we need this
+		getValues,
+		formState: { errors },
+	} = useForm();
+
 	const queryClient = useQueryClient();
 
-	// b2 : useMutation to change database
 	const { mutate, isLoading: isCreating } = useMutation({
 		// mutate(data) -> createCabin(data)
 		mutationFn: createCabin,
@@ -66,47 +73,75 @@ function CreateCabinForm() {
 	});
 
 	function onSubmit(data) {
-		// b3 : use it
 		mutate(data);
 	}
 
+	// b1. new error if not submit then error
+	function onError(errors) {
+		console.log(errors);
+	}
+
 	return (
-		<Form onSubmit={handleSubmit(onSubmit)}>
+		<Form onSubmit={handleSubmit(onSubmit, onError)}>
+			{/* 1 */}
 			<FormRow>
 				<Label htmlFor="name">Cabin name</Label>
-				<Input type="text" id="name" {...register("name")} />
+				<Input
+					type="text"
+					id="name"
+					{...register("name", { required: "This filed is required" })}
+				/>
+				{/* b3.  errors of this name exist ?  */}
+				{errors?.name?.message && <Error>{errors.name.message}</Error>}
 			</FormRow>
-
+			{/* 2 */}
 			<FormRow>
 				<Label htmlFor="maxCapacity">Maximum capacity</Label>
-				<Input type="number" id="maxCapacity" {...register("maxCapacity")} />
+				<Input
+					type="number"
+					id="maxCapacity"
+					{...register("maxCapacity", { required: "This filed is required" })}
+				/>
 			</FormRow>
-
+			{/*3  */}
 			<FormRow>
 				<Label htmlFor="regularPrice">Regular price</Label>
-				<Input type="number" id="regularPrice" {...register("regularPrice")} />
+				<Input
+					type="number"
+					id="regularPrice"
+					{...register("regularPrice", {
+						required: "This filed is required",
+						min: { value: 1, message: " Capacity should be at least 1 " },
+					})}
+				/>
 			</FormRow>
-
+			{/*4 */}
 			<FormRow>
 				<Label htmlFor="discount">Discount</Label>
 				<Input
 					type="number"
 					id="discount"
 					defaultValue={0}
-					{...register("discount")}
+					{...register("discount", {
+						// use getValues
+						required: "This filed is required",
+						validate: (value) =>
+							value <= getValues().regularPrice ||
+							"discount should be smaller than price",
+					})}
 				/>
 			</FormRow>
-
+			{/* 5 */}
 			<FormRow>
 				<Label htmlFor="description">Description for website</Label>
 				<Textarea
 					type="number"
 					id="description"
 					defaultValue=""
-					{...register("description")}
+					{...register("description", { required: "This filed is required" })}
 				/>
 			</FormRow>
-
+			{/* 6 */}
 			<FormRow>
 				<Label htmlFor="image">Cabin photo</Label>
 				<FileInput id="image" accept="image/*" />

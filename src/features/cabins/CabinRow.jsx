@@ -62,8 +62,9 @@ function CabinRow({ cabin }) {
 		mutationFn: deleteCabin,
 		onSuccess: () => {
 			toast.success("Cabin successfully deleted");
-			// refresh cabins list after deletion
+			// mutate change data -> cache is outdate -> refresh cabins list after deletion
 			queryClient.invalidateQueries({ queryKey: ["cabins"] });
+      // without invalidateQueries UI will not change even database changed
 		},
 		onError: (err) => toast.error(err.message),
 	});
@@ -72,7 +73,7 @@ function CabinRow({ cabin }) {
 		<TableRow role="row">
 			<Img src={image} />
 			<Cabin>{name}</Cabin>
-			<div>Fits up tp {maxCapacity} guests</div>
+			<div> {maxCapacity} guests</div>
 			<Price>{formatCurrency(regularPrice)}</Price>
 			<Discount>{formatCurrency(discount)}</Discount>
 			<button onClick={() => mutate(cabinId)} disabled={isDeleting}>
