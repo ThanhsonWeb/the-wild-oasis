@@ -15,7 +15,6 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 
-// b1 npm i react-query
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
