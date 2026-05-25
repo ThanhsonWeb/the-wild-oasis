@@ -4,38 +4,21 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins.js";
-import { toast } from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+
 import FormRow from "../../ui/FormRow.jsx";
+import { useCreateCabin } from "./useCreateCabin.js";
 
 function CreateCabinForm() {
+	// custom hook
+	const { isCreating, mutate } = useCreateCabin();
+
 	const {
 		register,
 		handleSubmit,
-		reset,
-		// b2 . we need this
 		getValues,
 		formState: { errors },
 	} = useForm();
 
-	const queryClient = useQueryClient();
-
-	const { mutate, isLoading: isCreating } = useMutation({
-		// mutate(data) -> createCabin(data)
-		mutationFn: createCabin,
-		onSuccess: () => {
-			toast.success("New Successfully created");
-			//  update successfully -> cache is become stale (outdated)
-			queryClient.invalidateQueries({ queryKey: ["cabins"] });
-			// tells react Query : “this data is no longer fresh, go get the latest version.”
-			reset();
-		},
-		onError: (err) => toast.error(err.message),
-	});
-
-  // b5 : add file to data 
 	function onSubmit(data) {
 		const file = data.image?.[0]; // safe access
 		mutate({ ...data, image: file });
