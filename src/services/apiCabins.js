@@ -1,6 +1,5 @@
 import supabase from "./supabase";
 
-// step 2 :
 
 export async function getCabins() {
 	const { data, error } = await supabase.from("cabins").select("*");
@@ -12,6 +11,8 @@ export async function getCabins() {
 	}
 	return data;
 }
+
+// b1 : create function read cabins from database
 
 export async function createCabin(newCabin) {
 	const { data, error } = await supabase.from("cabins").insert([newCabin]);

@@ -6,6 +6,10 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { createCabin } from "../../services/apiCabins.js";
+import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FormRow = styled.div`
 	display: grid;
@@ -44,20 +48,32 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
-	// b1 : npm i react-hoook-form
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, reset } = useForm();
+	const queryClient = useQueryClient();
 
-  // data = all the input value
+	// b2 : useMutation to change database
+	const { mutate, isLoading: isCreating } = useMutation({
+		// mutate(data) -> createCabin(data)
+		mutationFn: createCabin,
+		onSuccess: () => {
+			toast.success("New Successfully created");
+			//  update successfully -> cache is become stale (outdated)
+			queryClient.invalidateQueries({ queryKey: ["cabins"] });
+			// tells react Query : “this data is no longer fresh, go get the latest version.”
+			reset();
+		},
+		onError: (err) => toast.error(err.message),
+	});
+
 	function onSubmit(data) {
-		console.log(data);
+		// b3 : use it
+		mutate(data);
 	}
 
 	return (
-		// b3 :
 		<Form onSubmit={handleSubmit(onSubmit)}>
 			<FormRow>
 				<Label htmlFor="name">Cabin name</Label>
-				{/* b2 : use register to store value instead using useState */}
 				<Input type="text" id="name" {...register("name")} />
 			</FormRow>
 
@@ -101,7 +117,7 @@ function CreateCabinForm() {
 				<Button variation="secondary" type="reset">
 					Cancel
 				</Button>
-				<Button>Edit cabin</Button>
+				<Button disabled={isCreating}>Create cabin</Button>
 			</FormRow>
 		</Form>
 	);
