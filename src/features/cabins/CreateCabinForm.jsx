@@ -10,18 +10,26 @@ import { useCreateCabin } from "./useCreateCabin.js";
 
 function CreateCabinForm() {
 	// custom hook
-	const { isCreating, mutate } = useCreateCabin();
+	const { isCreating, createCabin } = useCreateCabin();
 
 	const {
 		register,
 		handleSubmit,
 		getValues,
+		reset,
 		formState: { errors },
 	} = useForm();
 
 	function onSubmit(data) {
 		const file = data.image?.[0]; // safe access
-		mutate({ ...data, image: file });
+		// createCabin = mutate
+		createCabin(
+			{ ...data, image: file },
+
+			{
+				onSuccess: () => reset(),
+			},
+		);
 	}
 
 	function onError(errors) {

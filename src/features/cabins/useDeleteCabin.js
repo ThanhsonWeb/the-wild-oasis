@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
+import { deleteCabin as deleteCabinFn } from "../../services/apiCabins";
 import { toast } from "react-hot-toast";
 
 export function useDeleteCabin() {
 	const queryClient = useQueryClient();
 
-	const { isLoading: isDeleting, mutate } = useMutation({
+	const { isLoading: isDeleting, mutate: deleteCabin } = useMutation({
 		// ex : mutate(cabinId) -> deleteCabin(cabinId)
-		mutationFn: deleteCabin,
+		mutationFn: deleteCabinFn,
 		onSuccess: () => {
 			toast.success("Cabin successfully deleted");
 			// mutate change data -> cache is outdate -> refresh cabins list after deletion
@@ -17,5 +17,5 @@ export function useDeleteCabin() {
 		onError: (err) => toast.error(err.message),
 	});
 
-	return { mutate, isDeleting };
+	return { deleteCabin, isDeleting };
 }

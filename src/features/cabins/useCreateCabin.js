@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "../../services/apiCabins.js";
+import { createCabin as createCabinFn } from "../../services/apiCabins.js";
 import { toast } from "react-hot-toast";
 
 export function useCreateCabin() {
 	const queryClient = useQueryClient();
 
-	const { mutate, isLoading: isCreating } = useMutation({
+	const { mutate : createCabin , isLoading: isCreating } = useMutation({
 		// mutate(data) -> createCabin(data)
-		mutationFn: createCabin,
+		mutationFn: createCabinFn,
 		onSuccess: () => {
 			toast.success("New Successfully created");
 			//  update successfully -> cache is become stale (outdated)
@@ -16,5 +16,5 @@ export function useCreateCabin() {
 		onError: (err) => toast.error(err.message),
 	});
 
-	return { mutate, isCreating };
+	return { createCabin, isCreating };
 }

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
+import { HiSquares2X2, HiTrash } from "react-icons/hi2";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
 	display: grid;
@@ -42,16 +44,30 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-	// custom hook
-	const { isDeleting, mutate } = useDeleteCabin();
+	// B1 .custom hook
+	const { isDeleting, deleteCabin } = useDeleteCabin();
+	const { isCreating, createCabin } = useCreateCabin();
+
 	const {
 		id: cabinId,
 		name,
 		image,
 		discount,
 		maxCapacity,
+		description,
 		regularPrice,
 	} = cabin;
+	// B2
+	function handleDuplicate() {
+		createCabin({
+			name: `Copy of ${name}`,
+			maxCapacity,
+			regularPrice,
+			discount,
+			image,
+			description,
+		});
+	}
 
 	return (
 		<TableRow role="row">
@@ -60,9 +76,15 @@ function CabinRow({ cabin }) {
 			<div> {maxCapacity} guests</div>
 			<Price>{formatCurrency(regularPrice)}</Price>
 			<Discount>{formatCurrency(discount)}</Discount>
-			<button onClick={() => mutate(cabinId)} disabled={isDeleting}>
-				Delete
-			</button>
+			<div>
+				{/* B3. ADD BUTTON */}
+				<button disabled={isCreating} onClick={handleDuplicate}>
+					<HiSquares2X2 />
+				</button>
+				<button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
+					<HiTrash />
+				</button>
+			</div>
 		</TableRow>
 	);
 }
