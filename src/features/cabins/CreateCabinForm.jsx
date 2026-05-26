@@ -20,11 +20,11 @@ function CreateCabinForm() {
 		formState: { errors },
 	} = useForm();
 
-	function onSubmit(data) {
-		const file = data.image?.[0]; // safe access
+	function onSubmit(dataForm) {
+		const file = dataForm.image?.[0]; // safe access
 		// createCabin = mutate
 		createCabin(
-			{ ...data, image: file },
+			{ ...dataForm, image: file },
 
 			{
 				onSuccess: () => reset(),
