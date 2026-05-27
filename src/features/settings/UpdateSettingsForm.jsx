@@ -26,8 +26,8 @@ function UpdateSettingsForm() {
 					type="number"
 					id="min-nights"
 					defaultValue={settings.minBookingLength}
-					// b2
 					disabled={isUpdating}
+					//  triggers once when the user leaves the field.
 					onBlur={(e) => handleUpdate(e, "minBookingLength")}
 				/>
 			</FormRow>

@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import FormRow from "../../ui/FormRow.jsx";
 import { useCreateCabin } from "./useCreateCabin.js";
 
-function CreateCabinForm() {
+function CreateCabinForm({ onCloseModal }) {
 	// custom hook
 	const { isCreating, createCabin } = useCreateCabin();
 
@@ -100,11 +100,14 @@ function CreateCabinForm() {
 			</FormRow>
 
 			<FormRow>
-				{/* type is an HTML attribute! */}
-				<Button variation="secondary" type="reset">
+				<Button
+					variation="secondary"
+					type="reset"
+					// 👉 “When the button is clicked, try to call onCloseModal. If it’s not provided, safely skip without crashing.”
+					onClick={() => onCloseModal?.()}
+				>
 					Cancel
 				</Button>
-				{/* disabled when isCreating is true */}
 				<Button disabled={isCreating}>Create cabin</Button>
 			</FormRow>
 		</Form>
