@@ -3,6 +3,9 @@ import { formatCurrency } from "../../utils/helpers";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { HiSquares2X2, HiTrash } from "react-icons/hi2";
 import { useCreateCabin } from "./useCreateCabin";
+import { useState } from "react";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import Modal from "../../ui/Modal";
 
 const TableRow = styled.div`
 	display: grid;
@@ -44,7 +47,9 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-	// B1 .custom hook
+	const [isOpenDelete, setIsOpenDelete] = useState(false);
+
+	// hook
 	const { isDeleting, deleteCabin } = useDeleteCabin();
 	const { isCreating, createCabin } = useCreateCabin();
 
@@ -57,7 +62,6 @@ function CabinRow({ cabin }) {
 		description,
 		regularPrice,
 	} = cabin;
-	// B2
 	function handleDuplicate() {
 		createCabin({
 			name: `Copy of ${name}`,
@@ -67,6 +71,10 @@ function CabinRow({ cabin }) {
 			image,
 			description,
 		});
+	}
+
+	function handleDelete() {
+		setIsOpenDelete(true);
 	}
 
 	return (
@@ -81,9 +89,19 @@ function CabinRow({ cabin }) {
 				<button disabled={isCreating} onClick={handleDuplicate}>
 					<HiSquares2X2 />
 				</button>
-				<button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
+				<button onClick={handleDelete} disabled={isDeleting}>
 					<HiTrash />
 				</button>
+				{isOpenDelete && (
+					<Modal>
+						<ConfirmDelete
+							resourceName="cabins"
+							disabled={isDeleting}
+							onConfirm={() => deleteCabin(cabinId)}
+							onCloseDelete={() => setIsOpenDelete(false)}
+						/>
+					</Modal>
+				)}
 			</div>
 		</TableRow>
 	);
