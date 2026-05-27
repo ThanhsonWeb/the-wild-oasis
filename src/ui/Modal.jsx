@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
+import { createPortal } from "react-dom";
+// import { useEffect, useRef } from "react";
 
 const StyledModal = styled.div`
 	position: fixed;
@@ -50,10 +52,18 @@ const Button = styled.button`
 	}
 `;
 
-// b1: create Modal
+//  createPortal  (teleport):  u can use it somewhere else in DOM
 function Modal({ children, onClose }) {
-	return (
-		<Overlay>
+	// // b1 : Detecting a click
+	function handleOverLay(e) {
+		// e.target =  the actual element clicked.
+		// e.currentTarget is Overlay
+
+		if (e.target === e.currentTarget) onClose();
+	}
+
+	return createPortal(
+		<Overlay onClick={handleOverLay}>
 			<StyledModal>
 				<Button onClick={onClose}>
 					<HiXMark />
@@ -61,7 +71,8 @@ function Modal({ children, onClose }) {
 
 				<div>{children}</div>
 			</StyledModal>
-		</Overlay>
+		</Overlay>,
+		document.body,
 	);
 }
 

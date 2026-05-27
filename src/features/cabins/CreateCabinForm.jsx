@@ -30,6 +30,7 @@ function CreateCabinForm({ onCloseModal }) {
 				onSuccess: () => reset(),
 			},
 		);
+		onCloseModal?.();
 	}
 
 	function onError(errors) {
@@ -37,7 +38,11 @@ function CreateCabinForm({ onCloseModal }) {
 	}
 
 	return (
-		<Form onSubmit={handleSubmit(onSubmit, onError)}>
+		// b1 : control type by props
+		<Form
+			onSubmit={handleSubmit(onSubmit, onError)}
+			type={onCloseModal ? "modal" : "regular"}
+		>
 			{/* use FormRow component */}
 			<FormRow label="Cabin name" error={errors?.name?.message}>
 				<Input
@@ -103,7 +108,7 @@ function CreateCabinForm({ onCloseModal }) {
 				<Button
 					variation="secondary"
 					type="reset"
-					// 👉 “When the button is clicked, try to call onCloseModal. If it’s not provided, safely skip without crashing.”
+					// 👉 “ button clicked -> call onCloseModal. If it’s not provided, safely skip without crashing.”
 					onClick={() => onCloseModal?.()}
 				>
 					Cancel
