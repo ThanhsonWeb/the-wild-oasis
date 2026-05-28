@@ -20,8 +20,8 @@ const Heading = styled.h1`
 			font-weight: 400;
 			color: yellow;
 		`}
-
-     
 `;
+
+
 
 export default Heading;
